@@ -1,0 +1,109 @@
+// Implemente um programa para gerenciar uma playlist de músicas utilizando a estrutura ArrayList, garantindo o encapsulamento correto dos atributos da
+classe Musica, a sobrescritura do método toString() para formatação, e o desenvolvimento de funcionalidades para adicionar, exibir, calcular a duração 
+total, remover faixas por título e identificar a música mais longa
+
+import java.util.ArrayList;
+import java.util.List;
+
+
+class Musica {
+    private String titulo;
+    private String artista;
+    private int duracao; // em segundos
+
+    // Construtor
+    public Musica(String titulo, String artista, int duracao) {
+        this.titulo = titulo;
+        this.artista = artista;
+        this.duracao = duracao;
+    }
+
+    // Getters para garantir o encapsulamento
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public String getArtista() {
+        return artista;
+    }
+
+    public int getDuracao() {
+        return duracao;
+    }
+
+    // Sobrescrita do método toString()
+    @Override
+    public String toString() {
+        return this.titulo + " - " + this.artista + " (" + this.duracao + "s)";
+    }
+}
+
+class Playlist {
+
+    private List<Musica> musicas = new ArrayList<>();
+
+    // Item 1: Adicionar músicas à playlist
+    public void adicionarMusica(Musica musica) {
+        musicas.add(musica);
+    }
+
+    // Item 2: Exibir todas as músicas na ordem em que foram adicionadas
+    public void exibirPlaylist() {
+        System.out.println("Playlist:");
+        for (int i = 0; i < musicas.size(); i++) {
+            System.out.println((i + 1) + ". " + musicas.get(i));
+        }
+    }
+
+    // Item 3: Exibir a duração total da playlist
+    public int calcularDuracaoTotal() {
+        int total = 0;
+        for (Musica m : musicas) {
+            total += m.getDuracao();
+        }
+        return total;
+    }
+
+    // Item 4: Permitir remover uma música pelo título
+    public void removerMusicaPorTitulo(String titulo) {
+        // Remove se o título for igual (ignorando maiúsculas/minúsculas)
+        musicas.removeIf(musica -> musica.getTitulo().equalsIgnoreCase(titulo));
+    }
+
+    // Item 5: Exibir a música mais longa da playlist
+    public Musica obterMusicaMaisLonga() {
+        if (musicas.isEmpty()) {
+            return null;
+        }
+        Musica maisLonga = musicas.get(0);
+        for (Musica m : musicas) {
+            if (m.getDuracao() > maisLonga.getDuracao()) {
+                maisLonga = m;
+            }
+        }
+        return maisLonga;
+    }
+}
+
+
+public class Main {
+    public static void main(String[] args) {
+        Playlist minhaPlaylist = new Playlist();
+
+        minhaPlaylist.adicionarMusica(new Musica("Numb", "Linkin Park", 185));
+        minhaPlaylist.adicionarMusica(new Musica("Yellow", "Coldplay", 270));
+        minhaPlaylist.adicionarMusica(new Musica("Halo", "Beyoncé", 260));
+
+        minhaPlaylist.exibirPlaylist();
+        System.out.println();
+
+        System.out.println("Duração total: " + minhaPlaylist.calcularDuracaoTotal() + " segundos");
+        System.out.println();
+
+        System.out.println("Música mais longa:");
+        System.out.println(minhaPlaylist.obterMusicaMaisLonga());
+
+        // Exemplo de uso do Item 4 (Remover música se necessário):
+        // minhaPlaylist.removerMusicaPorTitulo("Yellow");
+    }
+}
